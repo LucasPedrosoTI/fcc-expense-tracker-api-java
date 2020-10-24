@@ -19,15 +19,13 @@ public class CategoryServiceImpl implements CategoryService {
   CategoryRepository categoryRepository;
 
   @Override
-  public List<Category> fetchAllCategories(Integer userId) {
-    // TODO Auto-generated method stub
-    return null;
+  public List<Category> fetchAllCategories(Integer userId) throws EtResourceNotFoundException {
+    return categoryRepository.findAll(userId);
   }
 
   @Override
   public Category fetchCategoryById(Integer userId, Integer categoryId) throws EtResourceNotFoundException {
-    // TODO Auto-generated method stub
-    return null;
+    return categoryRepository.findById(userId, categoryId);
   }
 
   @Override
@@ -38,9 +36,8 @@ public class CategoryServiceImpl implements CategoryService {
   }
 
   @Override
-  public void updateCategory(Integer userId, Integer categoryId, Category category) throws EtBadRequestException {
-    // TODO Auto-generated method stub
-
+  public Category updateCategory(Integer userId, Integer categoryId, Category category) throws EtBadRequestException {
+    return categoryRepository.update(userId, categoryId, category);
   }
 
   @Override

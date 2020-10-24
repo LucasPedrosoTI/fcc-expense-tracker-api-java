@@ -1,5 +1,6 @@
 package com.lucaspedrosoti.expensetracker.resources;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,10 +27,23 @@ public class CategoryResource {
   CategoryService categoryService;
 
   @GetMapping("")
-  public String getAllCategories(HttpServletRequest req) {
+  public ResponseEntity<List<Category>> getAllCategories(HttpServletRequest req) {
     int userId = (Integer) req.getAttribute("userId");
 
-    return "Authenticated! UserId: " + userId;
+    List<Category> categories = categoryService.fetchAllCategories(userId);
+
+    return new ResponseEntity<>(categories, HttpStatus.OK);
+  }
+
+  @GetMapping("/{categoryId}")
+  public ResponseEntity<Category> getCategoryByID(HttpServletRequest req,
+      @PathVariable("categoryId") Integer categoryId) {
+
+    int userId = (Integer) req.getAttribute("userId");
+
+    Category category = categoryService.fetchCategoryById(userId, categoryId);
+
+    return new ResponseEntity<>(category, HttpStatus.OK);
   }
 
   @PostMapping
@@ -38,5 +54,16 @@ public class CategoryResource {
     Category category = categoryService.addCategory(userId, title, description);
 
     return new ResponseEntity<>(category, HttpStatus.CREATED);
+  }
+
+  @PutMapping("/{categoryId}")
+  public ResponseEntity<Category> updateCategory(HttpServletRequest req, @PathVariable("categoryId") Integer categoryId,
+      @RequestBody Category category) {
+
+    int userId = (Integer) req.getAttribute("userId");
+
+    Category updatedCategory = categoryService.updateCategory(userId, categoryId, category);
+
+    return new ResponseEntity<>(updatedCategory, HttpStatus.ACCEPTED);
   }
 }
