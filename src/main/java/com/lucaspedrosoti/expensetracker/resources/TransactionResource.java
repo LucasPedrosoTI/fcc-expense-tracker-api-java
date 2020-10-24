@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +36,7 @@ public class TransactionResource {
     return new ResponseEntity<>(transactions, HttpStatus.OK);
   }
 
-  @GetMapping("/{transactionId}")
+  @GetMapping("{transactionId}")
   public ResponseEntity<Transaction> getTransactionById(HttpServletRequest req,
       @PathVariable("categoryId") Integer categoryId, @PathVariable("transactionId") Integer transactionId) {
     int userId = (Integer) req.getAttribute("userId");
@@ -59,4 +60,15 @@ public class TransactionResource {
     return new ResponseEntity<>(transaction, HttpStatus.CREATED);
   }
 
+  @PutMapping("/{transactionId}")
+  public ResponseEntity<Transaction> updateTransaction(HttpServletRequest req,
+      @PathVariable("categoryId") Integer categoryId, @PathVariable("transactionId") Integer transactionId,
+      @RequestBody Transaction transaction) {
+    int userId = (Integer) req.getAttribute("userId");
+
+    Transaction updatedTransaction = transactionService.updateTransaction(userId, categoryId, transactionId,
+        transaction);
+
+    return new ResponseEntity<>(updatedTransaction, HttpStatus.ACCEPTED);
+  }
 }

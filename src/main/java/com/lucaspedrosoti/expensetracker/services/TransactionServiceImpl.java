@@ -39,8 +39,7 @@ public class TransactionServiceImpl implements TransactionService {
   @Override
   public Transaction updateTransaction(Integer userId, Integer categoryId, Integer transactionId,
       Transaction transaction) throws EtBadRequestException {
-    // TODO Auto-generated method stub
-    return null;
+    return transactionRepository.update(userId, categoryId, transactionId, transaction);
   }
 
   @Override
