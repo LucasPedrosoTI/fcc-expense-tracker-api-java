@@ -45,8 +45,11 @@ public class TransactionServiceImpl implements TransactionService {
   @Override
   public void removeTransaction(Integer userId, Integer categoryId, Integer transactionId)
       throws EtResourceNotFoundException {
-    // TODO Auto-generated method stub
-
+    try {
+      transactionRepository.removeById(userId, categoryId, transactionId);
+    } catch (Exception e) {
+      throw new EtBadRequestException("Invalid Request");
+    }
   }
 
 }

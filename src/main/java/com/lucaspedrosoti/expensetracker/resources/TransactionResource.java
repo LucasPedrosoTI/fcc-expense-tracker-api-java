@@ -1,5 +1,6 @@
 package com.lucaspedrosoti.expensetracker.resources;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import com.lucaspedrosoti.expensetracker.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -70,5 +72,18 @@ public class TransactionResource {
         transaction);
 
     return new ResponseEntity<>(updatedTransaction, HttpStatus.ACCEPTED);
+  }
+
+  @DeleteMapping("{transactionId}")
+  public ResponseEntity<Map<String, Boolean>> deleteTransaction(HttpServletRequest req,
+      @PathVariable("categoryId") Integer categoryId, @PathVariable("transactionId") Integer transactionId) {
+    int userId = (Integer) req.getAttribute("userId");
+
+    transactionService.removeTransaction(userId, categoryId, transactionId);
+
+    Map<String, Boolean> response = new HashMap<String, Boolean>();
+    response.put("success", true);
+
+    return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
   }
 }

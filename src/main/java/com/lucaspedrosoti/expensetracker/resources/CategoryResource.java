@@ -1,5 +1,6 @@
 package com.lucaspedrosoti.expensetracker.resources;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import com.lucaspedrosoti.expensetracker.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,5 +67,18 @@ public class CategoryResource {
     Category updatedCategory = categoryService.updateCategory(userId, categoryId, category);
 
     return new ResponseEntity<>(updatedCategory, HttpStatus.ACCEPTED);
+  }
+
+  @DeleteMapping("{categoryId}")
+  public ResponseEntity<Map<String, Boolean>> deleteCategory(HttpServletRequest req,
+      @PathVariable("categoryId") Integer categoryId) {
+    int userId = (Integer) req.getAttribute("userId");
+
+    categoryService.removeCategory(userId, categoryId);
+
+    Map<String, Boolean> response = new HashMap<>();
+    response.put("success", true);
+
+    return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
   }
 }
