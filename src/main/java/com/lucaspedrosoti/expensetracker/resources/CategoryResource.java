@@ -36,7 +36,7 @@ public class CategoryResource {
   }
 
   @GetMapping("/{categoryId}")
-  public ResponseEntity<Category> getCategoryByID(HttpServletRequest req,
+  public ResponseEntity<Category> getCategoryById(HttpServletRequest req,
       @PathVariable("categoryId") Integer categoryId) {
 
     int userId = (Integer) req.getAttribute("userId");
